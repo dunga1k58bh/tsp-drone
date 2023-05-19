@@ -1,10 +1,12 @@
 import numpy as np
 import math
+import os
 
 dataset = "Solomon/10/"
 
 def readData(filename, truck_speed, drone_speed):
-    path = 'D:/Code/VsCode/TTTH/data/TSPrd(time)/'
+
+    path = os.getcwd() + '\data/TSPrd(time)/'
 
     with open(path+dataset+filename, "r") as file:
         lines = file.readlines()

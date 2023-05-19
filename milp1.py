@@ -165,5 +165,3 @@ end_time = time.time()
 solve_time = end_time - start_time
 print('Solve Time:', solve_time)
 print(solution)
-
-pi = 
