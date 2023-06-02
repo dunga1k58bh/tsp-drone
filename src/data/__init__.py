@@ -2,7 +2,7 @@ import numpy as np
 import math
 import os
 
-dataset = "Solomon/10/"
+dataset = "Solomon/15/"
 
 def readData(filename, truck_speed, drone_speed):
 
@@ -60,7 +60,7 @@ def getTruckRoute(x, solution, n):
     pi = np.zeros(n+1)
     while cur < n+1:
         for i in range(n+2):
-            if solution[x[j, i]] == 1:
+            if round(solution[x[j, i]]) == 1:
                 j= i
                 pi[cur] = i
                 cur += 1

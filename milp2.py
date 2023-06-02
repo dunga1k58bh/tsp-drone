@@ -15,7 +15,7 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("RC101_3.dat", truck_speed, drone_speed)
+n, w, t, d = readData("R101_1.5.dat", truck_speed, drone_speed)
 
 a = [1 for i in range(n+2)]
 N = [i for i in range(1, n+1)]
@@ -93,7 +93,7 @@ end_time = time.time()
 solve_time = end_time - start_time
 print('Stage 1 -- Done')
 print('Solve Time:', solve_time)
-print(solution[T[n+1]])
+print(solution)
 
 pi = getTruckRoute(x, solution, n).astype(int).tolist()
 
