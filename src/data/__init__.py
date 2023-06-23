@@ -2,7 +2,7 @@ import numpy as np
 import math
 import os
 
-dataset = "Solomon/15/"
+dataset = "Solomon/10/"
 
 def readData(filename, truck_speed, drone_speed):
 

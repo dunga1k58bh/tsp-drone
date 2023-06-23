@@ -15,7 +15,7 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("R101_2.dat", truck_speed, drone_speed)
+n, w, t, d = readData("C101_0.5.dat", truck_speed, drone_speed)
 
 a = [1 for i in range(n+2)]
 N = [i for i in range(1, n+1)]
@@ -73,6 +73,8 @@ for j in N:
 for i in N:
     mdl.add_constraint(mdl.sum(x[(i, j)] for j in N_n1 if i != j) == 1)
 
+
+
 #6
 for i in D:
     mdl.add_constraint(u[i] <= u[0])
@@ -103,19 +105,19 @@ for j in N:
 for j in N:
     mdl.add_constraint(T[j] >= w[j] + min(d[j], t[0,j]))
 
-# #14
+# # #14
 for i in D_0:
     for j in N :
         if j == i:continue
         mdl.add_constraint(T[j] >= T[i] - M * (1 - y[i,j]))
 
-# #15
+# # #15
 for i in N_0:
     for j in N_n1:
         if ((j in D) or (j == i)): continue
         mdl.add_constraint(T[j] >= T[i] + t[i,j] - M * (1 - x[i,j]))
 
-# #16
+# # #16
 for i in N_0:
     for j in D :
         if j == i:continue
@@ -131,7 +133,7 @@ for i in D:
         if i == j: continue
         mdl.add_constraint(s[j] >= T[i] + d[i] - M * (1 - r[i,j]))
 
-# #19
+# # #19
 for i in N:
     for j in D:
         mdl.add_constraint(s[j] >= w[i]*y[j,i])
@@ -154,7 +156,7 @@ for j in D:
 for i in N:
     mdl.add_constraint(T[n+1] >= T[i] + t[i,n+1])
 
-# #24
+# # #24
 mdl.add_constraint(T[n+1] >= T[0] + mdl.sum(t[i,j]*x[i,j] for i in N_0n1 for j in N_0n1) + sum(e[i] for i in D))
 mdl.minimize(T[n+1])
 mdl.set_time_limit(10800)
