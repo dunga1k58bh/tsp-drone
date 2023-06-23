@@ -50,7 +50,7 @@ y = {} # 1, if the order of customer j is loaded onto the truck at node i. 0, ot
 T = {} #Time when the truck departs node i.
 s = {} #Time when the drone is launched for node i.
 e = {} #Elapsed time between arrival and departure of the truck at node i.
-# index  = {}
+index  = {}
 
 #1
 for k in K:
@@ -82,9 +82,9 @@ for k in K:
         T[k, i] = mdl.continuous_var(name=f'T_{k}/{i}')
 
 
-# for k in K:
-#     for i in N_0n1:
-#         index[k, i] = mdl.continuous_var(name=f'index_{k}/{i}')
+for k in K:
+    for i in N_0n1:
+        index[k, i] = mdl.continuous_var(name=f'index_{k}/{i}')
 
 maxT = mdl.continuous_var(name=f'maxT')
 
@@ -121,50 +121,60 @@ for k in K:
         mdl.add_constraint(mdl.sum(x[k, i, j] for j in N_n1 if j != i) == mdl.sum(x[k, j, i] for j in N_0 if i != j))
 
 #5.2 for the truck routing
-# for k in K:
-#     for i in N_0n1:
-#         for j in N_0n1:
-#             if (i != j):
-#                 mdl.add_constraint(index[k, j] - index[k, i] >= 1 - (n+1)*(1 - x[k, i , j]))
+if (_k != 1):
+    for k in K:
+        for i in N_0n1:
+            for j in N_0n1:
+                if (i != j):
+                    mdl.add_constraint(index[k, j] - index[k, i] >= 1 - (n+1) * (1 - x[k, i , j]))
 
+
+    
 #Routing for drone
 
-#6
+# #6
 for c in C:
     for i in D:
         mdl.add_constraint(u[c, i] <= u[c, 0])
 
-#7
+# #7
 for c in C: 
     mdl.add_constraint(mdl.sum(r[c, 0 , j] for j in D) == u[c, 0] )
 
-#8
+# #8
 for c in C: 
     mdl.add_constraint(mdl.sum(r[c, i , n+1] for i in D) == u[c, 0])
 
-#9
+# #9
 for c in C:
     for j in D:
         mdl.add_constraint(mdl.sum(r[c, i , j] for i in D_0 if i != j) == u[c, j])
 
-#10
+# # #10
 for c in C:
     for i in D:
         mdl.add_constraint(mdl.sum(r[c, i , j] for j in D_n1 if i != j) == u[c, i])
 
-#10.1
+
+# # #10.1
 for i in D:
     mdl.add_constraint(mdl.sum(u[c, i] for c in C) <= 1)
 
 
-# 11 Drone capacity
+# # # 11 Drone capacity
 for c in C:
     for i in D:
         mdl.add_constraint(mdl.sum(y[c, i, j] * a[j] for j in N) == A * u[c, i])
 
-#12 
+# # #12 
 for j in N:
     mdl.add_constraint(mdl.sum(y[c, i, j] for c in C for i in D_0) == 1)
+
+for c in C:
+    for i in N:
+        for j in N:
+            for k in K:
+                mdl.add_constraint(mdl.sum(x[k, h, i] for h in N_0) + mdl.sum(x[k, p, j] for p in N_0) + 2 * (1 - y[c, i, j]) >= 2)
 
 
 #13
@@ -172,29 +182,28 @@ for k in K:
     for j in N:
         mdl.add_constraint(T[k, j] >= w[j] + min(d[j], t[0, j]))
 
-#14
+# #14
 for k in K:
     for i in D_0:
         for j in N :
             if j == i:continue
             mdl.add_constraint(T[k, j] >= T[k, i] - M * (1 - mdl.sum(y[c, i, j] for c in C)))
 
-# # #15
-for k in K:
+# # # #15
+for k in K: 
     for i in N_0:
         for j in N_n1:
             if ((j in D) or (j == i)): continue
-            mdl.add_constraint(T[k, j] >= T[k, i] + t[i,j] - M * (1 - x[k,i,j]))
+            mdl.add_constraint(T[k, j] >= T[k, i] + t[i, j] - M * (1 - x[k, i, j]))
 
-#16
+# #16
 for k in K:
     for i in N_0:
         for j in D :
             if j == i:continue
-            mdl.add_constraint(T[k, j] >= T[k, i] + t[i,j] + delta*sum(u[c, j] for c in C) - M * (1 - x[k, i, j]))
+            mdl.add_constraint(T[k, j] >= T[k, i] + t[i,j] + delta * sum(u[c, j] for c in C) - M * (1 - x[k, i, j]))
 
-
-#17
+# #17
 for k in K:
     for c in C:
         for j in D:
@@ -210,7 +219,7 @@ for c in C:
                 mdl.add_constraint(s[c, j] >= T[k, i] + d[i] - M * (1 - r[c, i, j]))
 
 
-#19
+# #19
 for c in C:
     for i in N:
         for j in D:
@@ -220,29 +229,29 @@ for c in C:
 #20
 for k in K:
     for j in N:
-        mdl.add_constraint(T[k, 0] >= w[j] * mdl.sum(y[c, 0, j] for c in C))
+        mdl.add_constraint(T[k, 0] >= w[j] * mdl.sum(y[c, 0, j] for c in C) - M * (1 - mdl.sum(x[k, i, j] for i in N_0)))
 
-#21
+# #21
 for k in K:
     for j in D: 
         for i in N_0:
             if i == j:continue
             mdl.add_constraint(e[k, j] >= T[k, j] - (T[k, i] + t[i,j]) - M * (1 - x[k, i, j]))
 
-#22
+# #22
 for k in K:
     for j in D:
         mdl.add_constraint(e[k, j] <= M * mdl.sum(u[c, j] for c in C))
 
 
-#23
+# #23
 for k in K:
     for i in N:
         mdl.add_constraint(T[k, n+1] >= T[k, i] + t[i,n+1])
 
-#24
+# #24
 for k in K:
-    mdl.add_constraint(T[k, n+1] >= T[k, 0] + mdl.sum(t[i,j]*x[k, i, j] for i in N_0n1 for j in N_0n1) + sum(e[k, i] for i in D))
+    mdl.add_constraint(T[k, n+1] >= T[k, 0] + mdl.sum(t[i,j] * x[k, i, j] for i in N_0n1 for j in N_0n1) + mdl.sum(e[k, i] for i in D))
 
 #The optiomal need
 for k in K:
