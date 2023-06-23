@@ -97,6 +97,10 @@ for k in K:
     for i in D:
         e[k, i] = mdl.continuous_var(name=f'e_{k}/{i}')
 
+for k in K:
+    for i in N:
+        mdl.add_constraint(x[k, i, i] == 0)
+
 #Constraint
 
 #2, Router of all truck must start at deport
@@ -139,7 +143,7 @@ for c in C:
 
 # #7
 for c in C: 
-    mdl.add_constraint(mdl.sum(r[c, 0 , j] for j in D) == u[c, 0] )
+    mdl.add_constraint(mdl.sum(r[c, 0 , j] for j in D) == u[c, 0])
 
 # #8
 for c in C: 
