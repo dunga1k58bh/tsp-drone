@@ -183,9 +183,8 @@ for i in D:
 
 # # # # 11 Drone capacity
 for c in C:
-    for k in K:
         for i in D:
-            mdl.add_constraint(mdl.sum(y[k, c, i, j] * a[j] for j in N) <= A * u[c, i])
+            mdl.add_constraint(mdl.sum(y[k, c, i, j] * a[j] for j in N for k in K) <= A * u[c, i])
 
 # # #12 
 for j in N:
