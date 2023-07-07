@@ -14,7 +14,7 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("C101_0.5.dat", truck_speed, drone_speed)
+n, w, t, d = readData("C101_1.5.dat", truck_speed, drone_speed)
 
 _k = 2 #Number of truck
 _c = 1 #Number of drone
@@ -84,7 +84,7 @@ for k in K:
 
 for k in K:
     for i in N_0n1:
-        index[k, i] = mdl.continuous_var(name=f'index_{k}/{i}')
+        index[k, i] = mdl.integer_var(name=f'index_{k}/{i}')
 
 maxT = mdl.continuous_var(name=f'maxT')
 
@@ -141,6 +141,8 @@ for c in C:
     for i in D:
         mdl.add_constraint(u[c, i] <= u[c, 0])
 
+mdl.add_constraint(sum(u[c, i] for c in C for i in D_0) >=1)
+
 # #7
 for c in C: 
     mdl.add_constraint(mdl.sum(r[c, 0 , j] for j in D) == u[c, 0])
@@ -165,10 +167,10 @@ for i in D:
     mdl.add_constraint(mdl.sum(u[c, i] for c in C) <= 1)
 
 
-# # # 11 Drone capacity
+# # # # 11 Drone capacity
 for c in C:
     for i in D:
-        mdl.add_constraint(mdl.sum(y[c, i, j] * a[j] for j in N) == A * u[c, i])
+        mdl.add_constraint(mdl.sum(y[c, i, j] * a[j] for j in N) <= A * u[c, i])
 
 # # #12 
 for j in N:
@@ -178,43 +180,42 @@ for c in C:
     for i in N:
         for j in N:
             for k in K:
-                mdl.add_constraint(mdl.sum(x[k, h, i] for h in N_0) + mdl.sum(x[k, p, j] for p in N_0) + 2 * (1 - y[c, i, j]) >= 2)
-
+                mdl.if_then(y[c, i, j] == 1, sum(x[k, l, i] for l in N_0) + sum(x[k, h, j] for h in N_0) == 2)
 
 #13
 for k in K:
     for j in N:
         mdl.add_constraint(T[k, j] >= w[j] + min(d[j], t[0, j]))
 
-# #14
+# # #14
 for k in K:
     for i in D_0:
         for j in N :
             if j == i:continue
             mdl.add_constraint(T[k, j] >= T[k, i] - M * (1 - mdl.sum(y[c, i, j] for c in C)))
 
-# # # #15
+# # # # #15
 for k in K: 
     for i in N_0:
         for j in N_n1:
             if ((j in D) or (j == i)): continue
             mdl.add_constraint(T[k, j] >= T[k, i] + t[i, j] - M * (1 - x[k, i, j]))
 
-# #16
+# # #16
 for k in K:
     for i in N_0:
         for j in D :
             if j == i:continue
             mdl.add_constraint(T[k, j] >= T[k, i] + t[i,j] + delta * sum(u[c, j] for c in C) - M * (1 - x[k, i, j]))
 
-# #17
-for k in K:
+# # #17
+# for k in K:
     for c in C:
         for j in D:
             mdl.add_constraint(T[k, j] >= s[c, j] + d[j] + delta - M*(1 - u[c, j]))
 
 
-#18
+# #18
 for c in C:
     for k in K:
         for i in D:
@@ -223,7 +224,7 @@ for c in C:
                 mdl.add_constraint(s[c, j] >= T[k, i] + d[i] - M * (1 - r[c, i, j]))
 
 
-# #19
+# # #19
 for c in C:
     for i in N:
         for j in D:

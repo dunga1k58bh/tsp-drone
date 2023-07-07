@@ -15,7 +15,7 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("C101_0.5.dat", truck_speed, drone_speed)
+n, w, t, d = readData("C101_1.5.dat", truck_speed, drone_speed)
 
 a = [1 for i in range(n+2)]
 N = [i for i in range(1, n+1)]
