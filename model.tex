@@ -1,0 +1,134 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese, english]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+\begin{document}
+
+\title{Models}
+\author{Dung le}
+\date{\today}
+
+\maketitle
+
+\section{Một số ký hiệu}
+Các xe sẽ bắt đầu từ đỉnh 0 và kết thúc tải đỉnh n+1. Trong quá trình di chuyển, các drone có thể bay đến các đỉnh để giao hàng cho xe tải. Xe tải có thể chờ drone và drone cũng có thể chờ xe tải
+\begin{itemize}
+	\item n: Số lượng khách hàng
+	\item $N$: {1, 2, .., n}, Tập chỉ số của khác hàng
+	\item Deport sẽ được coi là đỉnh có chỉ số là 0 hoặc n+1
+	\item $N_{0}$: Tập chỉ số của khách hàng cộng thêm đỉnh 0
+	\item $N_{n+1}$: Tập chỉ số của khách hàng cộng thêm đỉnh n+1
+	\item $N_{0,n+1}$: Tất cả các đỉnh
+	\item $D$: Tập các đỉnh mà drone có thể bay tới
+	\item $D_{0}$, $D_{n+1}$, $D_{0,n+1}$: Ý nghĩa tương tự như N
+	
+\end{itemize}
+
+\section{Tham số đầu vào}
+
+\begin{itemize}
+
+  \item k: Số lượng xe
+  \item c: Số lượng drone
+  \item $w_i$: Release date hàng hoá của khách hàng i
+  \item $t_ij$: Thời gian xe đi từ cạnh i đến j
+  \item $d_j$: Thời gian bay của drone tới node j
+  \item $\delta$: Thời gian nhận, tháo dỡ hàng và khởi động lại
+  \item $a_i$: Tải trọng yêu cầu của hàng hoá khách hàng i
+  \item A: Tải trọng tối đa của drone
+  \item M: Số lớn
+\end{itemize}
+
+\section{Biến}
+
+\begin{itemize}
+	\item $x_{ij}^{k}$: 1, nếu xe tải đi trực tiếp từ i đến j, 0 nếu ngược lại
+	\item $r_{ịj}^{c}$: 1, nếu drone bay trực tiếp từ đỉnh i đến j, 0 nếu ngượi lại
+	\item $u_{i}^{c}$: 1, nếu drone c bay đến node i để giao hàng cho xe tải, 0 nếu ngược lại
+	\item $y_{ij}^{kc}$: 1, Nếu hàng hoá của khách hàng j được cho lên xe tải k tại node i bởi drone c
+	\item $T_{i}^{k}$: Thời gian xe tải xong việc và rời khỏi node i
+	\item $s_{i}^{c}$: Thời gian drone c khởi động ở node i
+	\item $\epsilon_{i}^{k}$: Khoảng cách thời gian giữa lúc đến và đi của xe tải k tại node i
+	\item $index_{i}^{k}$: Thứ tự phục vụ của node i bởi xe k. Dùng constrain MTZ
+	\item $maxT$: Thời gian của xe tải lâu nhất khi hoàn thành chu trình (Về đến đỉnh n+1)
+
+\end{itemize}
+
+\subsection{Công thức MILP}
+
+
+\begin{equation}
+\centering
+\min  maxT
+\end{equation}
+
+Thoả mãn:
+\begin{enumerate}
+	\item Ràng buộc hành trình xe\\
+		\begin{alignat}{2}
+		\intertext{Mọi xe phải bắt đầu đi từ depot}
+		&\sum_{j \in N} x_{0j}^{k} = 1 &&\quad \forall k \in K 
+		\intertext{Mọi xe phải kết thúc hành trình tại depot}
+		&\sum_{i \in N} x_{i,n+1}^{k} = 1 &&\quad \forall k \in K
+		\intertext{Mối khách hàng đều có đúng 1 xe tải đến thăm}
+		&\sum_{i \in N_{0} \setminus \{j\}} x_{ij}^{k} = 1 &&\quad \forall k \in K, \forall j \in N
+		\intertext{Khách hàng được thăm bởi cùng 1 xe tải}
+		&\sum_{j \in N_{0} \setminus \{i\}} x_{ji}^{k} = \sum_{j \in N_{n+1} \setminus \{i\}} x_{ij}^{k}&&\quad \forall k \in K, \forall i \in N
+		\intertext{MTZ constrain, nếu xe k đi từ i đến j thì thứ tự phục vụ của đinh j lớn hơn đỉnh i (đối với xe k)}
+		&index_{j}^{k} - index_{j}^{k} >= 1 - (n+1)*(1 - x_{ij}^{k})&&\quad \forall k \in K, \forall j \in N_{0} \setminus \{i\}, \forall i \in N_{0}
+		\end{alignat}
+		
+	\item Ràng buộc về hành trình drone
+		\begin{alignat}{2}
+		\intertext{Nếu drone không xuất phát, không điểm nào được thăm}
+		&u_{i}^{c} <= u_{0}^{c} &&\quad \forall c \in C, i \in D 
+		\intertext{Nếu drone không xuất phát, không điểm nào được thăm}
+		&u_{i}^{c} <= u_{0}^{c} &&\quad \forall c \in C, i \in D 
+		\intertext{Nếu drone xuất phát, Nó phải bay đến một điểm nào đó để giao hàng}
+		&\sum_{j \in D} r_{0j}^{c} = u_{0}^{c} &&\quad \forall c \in C, j \in D 
+		\intertext{Và phải về đến depot}
+		&\sum_{i \in D} r_{i,n+1}^{c} = u_{0}^{c} &&\quad \forall c \in C, i \in D 
+		\intertext{Drone phải bay đến đỉnh nếu u = 1}
+		&\sum_{i \in D_{0} \setminus \{j\}} r_{ij}^{c} = u_{j}^{c} &&\quad \forall c \in C, j \in D \\
+		&\sum_{j \in D_{n+1} \setminus \{i\}} r_{ij}^{c} = u_{i}^{c} &&\quad \forall c \in C, j \in D 
+		\intertext{Mỗi đỉnh chỉ được thăm bởi tối đa 1 drone (có thể không được thăm)}
+		&\sum_{i \in D} u_{i}^{c} <= 1 &&\quad \forall c \in C, i \in D 
+		\end{alignat}
+		
+	\item Ràng buộc về tải trọng của drone
+		\begin{alignat}{2}
+		\intertext{Tổng khối lượng hàng hoá drone c giao cho xe k tại đỉnh i phải nhỏ hơn tải trọng của drone}
+		&\sum_{k \in K}\sum_{j \in N} y_{ij}^{kc} <= A * u_{i}^{c} &&\quad \forall c \in C, i \in D 
+		\intertext{Hàng hoá của khách hàng j được cho lên xe tại duy nhất 1 đỉnh (có thể là depot hoặc trên chu trình di chuyển)}
+		&\sum_{k \in K}\sum_{c \in C}\sum_{i \in N_{0}} y_{ij}^{kc} <= 1 &&\quad \forall k \in K, c \in C, j \in N
+		\end{alignat}
+\end{enumerate}
+
+\subsection{Second Subsection}
+
+This is the second subsection.
+
+\subsubsection{Subsubsection}
+
+This is a subsubsection within the second subsection.
+
+\section{Conclusion}
+
+This is the conclusion of my document.
+
+\section{Summary}
+
+Here is a summary of the main points:
+
+\begin{enumerate}
+  \item Item 1: This is the first item.
+  \item Item 2: This is the second item.
+  \item Item 3: This is the third item.
+\end{enumerate}
+
+\end{document}

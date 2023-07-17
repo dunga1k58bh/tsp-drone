@@ -14,10 +14,10 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("C101_0.5.dat", truck_speed, drone_speed)
+n, w, t, d = readData("R101_3.dat", truck_speed, drone_speed)
 
 _k = 2 #Number of truck
-_c = 1 #Number of drone
+_c = 2 #Number of drone
 
 K = [i for i in range(1, _k + 1)]
 C = [i for i in range(1, _c + 1)]
@@ -290,8 +290,51 @@ solution = mdl.solve()
 end_time = time.time()
 solve_time = end_time - start_time
 print('Solve Time:', solve_time)
+
 print(solution)
 
+for k in K:
+    print(f"Route of truck {k}")
+    current_node = 0
+    while(current_node != n+1):
+        print(current_node , end=' - ')
+        for j in N_0n1:
+            if (solution[x[k, current_node, j]] == 1):
+                current_node = j
+                break
+    print(current_node) 
 
+for c in C:
+    print(f"Route of drone {c}")
+    current_node = 0
+    while(current_node != n+1):
+        print(current_node , end=' - ')
+        for j in D_n1:
+            if current_node == j: continue
+            if (solution[r[c, current_node, j]] == 1):
+                current_node = j
+                break
+    print(current_node) 
+
+
+visited_by_drone = []
+for c in C:
+    # print(f"Visit of drone {c}")
+    for i in D:
+        if (solution[u[c, i]]):
+            # print(i, end=", ")
+            visited_by_drone.append(i)
+    # print("")
+
+for node in visited_by_drone:
+    print(f"The list order drone pack to truck at node {node}")
+
+    for k in K:
+        for c in C:
+            for j in N:
+                if solution[y[k, c, node, j]] == 1:
+                    print(j, end=', ')
+
+    print("")
 
 
