@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.7.3)  19 JUL 2023 20:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.7.3)  19 JUL 2023 20:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -418,7 +418,7 @@ Overfull \hbox (36.05766pt too wide) detected at line 127
 []
  []
 
-[4] [5] (model.aux) ) 
+[4] [5] [6] (model.aux) ) 
 Here is how much of TeX's memory you used:
  3610 strings out of 476331
  55164 string characters out of 5787766
@@ -427,26 +427,26 @@ Here is how much of TeX's memory you used:
  527747 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,10n,62p,349b,355s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\adasd\AppData\Local\MiKTeX\fonts/pk/ljfour/jkna
-ppen/ec/dpi600\tcrm1000.pk><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmex10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/adasd/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/adasd/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/adasd/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/
-adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:
-/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.
-pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmsy10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmsy7.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/
-vntex/vnr/vnbx10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/
-vntex/vnr/vnbx12.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/
-vntex/vnr/vnr10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/v
-ntex/vnr/vnr12.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/vn
-tex/vnr/vnr17.pfb>
-Output written on model.pdf (5 pages, 164347 bytes).
+ <C:\Users\adasd\AppData\Local\MiKTeX\fonts/pk/ljfour/
+jknappen/ec/dpi600\tcrm1000.pk><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/adasd/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/adasd/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/adasd/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/adas
+d/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Us
+ers/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb
+><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
+mr7.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmsy7.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/vntex/vnr/vnbx10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/vntex/vnr/vnbx12.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/vntex/vnr/vnr10.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/vntex/vnr/vnr12.pfb><C:/Users/adasd/AppData/Local/Programs/MiKTeX/fonts/type
+1/vntex/vnr/vnr17.pfb>
+Output written on model.pdf (6 pages, 164952 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
+ 96 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
