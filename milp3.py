@@ -14,7 +14,7 @@ delta = 5
 M = 100000
 enduration = 90
 
-n, w, t, d = readData("R101_3.dat", truck_speed, drone_speed)
+n, w, t, d = readData("C101_1.dat", truck_speed, drone_speed)
 
 _k = 2 #Number of truck
 _c = 2 #Number of drone
@@ -47,7 +47,6 @@ T = {} #Time when the truck departs node i.
 s = {} #Time when the drone is launched for node i.
 e = {} #Elapsed time between arrival and departure of the truck at node i.
 index  = {}
-# p = {} # = 1 if the order of node i is reserve by truck k
 
 #1
 for k in K:
@@ -134,28 +133,12 @@ if (_k != 1):
             for j in N_0n1:
                 if (i != j):
                     mdl.add_constraint(index[k, j] - index[k, i] >= 1 - (n+1) * (1 - x[k, i , j]))
-
-
-# for i in N:
-#     mdl.add_constraint(sum(p[k, i] for k in K) == 1)
-
-# for k in K:
-
-#     mdl.add_constraint(p[k, 0] == 1)
-#     mdl.add_constraint(p[k, n+1] ==1)
-    
-#     for i in N:
-#         for j in N:
-#             mdl.if_then(x[k, i, j] == 1, p[k, i] + p[k, j] == 2)
-    
 #Routing for drone
 
 # #6
 for c in C:
     for i in D:
         mdl.add_constraint(u[c, i] <= u[c, 0])
-
-mdl.add_constraint(sum(u[c, i] for c in C for i in D_0) >=1)
 
 # #7
 for c in C: 
@@ -183,8 +166,8 @@ for i in D:
 
 # # # # 11 Drone capacity
 for c in C:
-        for i in D:
-            mdl.add_constraint(mdl.sum(y[k, c, i, j] * a[j] for j in N for k in K) <= A * u[c, i])
+    for i in D:
+        mdl.add_constraint(mdl.sum(y[k, c, i, j] * a[j] for j in N for k in K) <= A * u[c, i])
 
 # # #12 
 for j in N:
@@ -247,16 +230,15 @@ for c in C:
 
 # # #19
 for c in C:
-    for k in K:
-        for i in N:
-            for j in D:
-                mdl.add_constraint(s[c, j] >= w[i]*y[k, c, j, i])
+    for i in N:
+        for j in D:
+            mdl.add_constraint(s[c, j] >= w[i]*sum(y[k, c, j, i] for k in K))
 
 
 #20
 for k in K:
     for j in N:
-        mdl.add_constraint(T[k, 0] >= w[j] * mdl.sum(y[k, c, 0, j] for c in C) - M * (1 - mdl.sum(x[k, i, j] for i in N_0)))
+        mdl.add_constraint(T[k, 0] >= w[j] * mdl.sum(y[k, c, 0, j] for c in C))
 
 # #21
 for k in K:

@@ -105,7 +105,30 @@ Thoả mãn:
 		\intertext{Tổng khối lượng hàng hoá drone c giao cho xe k tại đỉnh i phải nhỏ hơn tải trọng của drone}
 		&\sum_{k \in K}\sum_{j \in N} y_{ij}^{kc} <= A * u_{i}^{c} &&\quad \forall c \in C, i \in D 
 		\intertext{Hàng hoá của khách hàng j được cho lên xe tại duy nhất 1 đỉnh (có thể là depot hoặc trên chu trình di chuyển)}
-		&\sum_{k \in K}\sum_{c \in C}\sum_{i \in N_{0}} y_{ij}^{kc} <= 1 &&\quad \forall k \in K, c \in C, j \in N
+		&\sum_{k \in K}\sum_{c \in C}\sum_{i \in N_{0}} y_{ij}^{kc} == 1 &&\quad \forall k \in K, c \in C, j \in N
+		\intertext{Nếu hàng hoá của khách hàng j được cho lên xe tại i, i!=0, thì i và j phải cùng thuộc 1 chu trình của 1 xe}
+		&\sum_{l \in N_{0}} x_{li}^{k} = \sum_{h \in N_{0}} x_{hj}^{k} &&\quad \forall k \in K, c \in C, i, j \in N \quad \text{, if } y_{ij}^{kc} = 1 \text{ or (} y_{0i}^{kc} = y_{0j}^{kc} = 1 \text{)}
+		\end{alignat}
+		
+	\item Ràng buộc về thời gian
+		\begin{alignat}{2}
+			\intertext{Thời gian xe tải k đến đỉnh i thuộc N phải lớn hơn release date của đỉnh đó + thêm thời gian xe tải hoặc drone bay}
+			&T_{j}^k >= w_{j} + \max{d_{j}, t_{0j}} &&\quad \forall k \in K, j \in N
+			\intertext{Nếu hàng hoá tại j được giao đến bởi bất kỳ drone nào của tại điểm i trên hành trình của xe k, thời gian xe qua điểm j phải lớn hơn i}
+			&T_{j}^k >= T_{i}^k - M \dot (1 - \sum_{c \in C} y_{ij}^{kc}) &&\quad \forall k \in K, i \in D_{0}, j \in N \setminus \{i\}
+			\intertext{Nếu đỉnh j không thể bay tới bởi drone, xe k đi từ i đến j để giao hàng, thời gian hoàn thành j phải bằng thời gian hoàn thành i + thời gian xe tải di chuyển giữa 2 điểm i, j}
+			&T_{j}^k >= T_{i}^k + t_{ij}- M \dot (1 - x_{ij}^{k}) &&\quad \forall k \in K, i \in N_0, j \in N_{n+1} \setminus (D \cup \{i\})
+			\intertext{Nếu bất kỳ drone nào bay đến đỉnh j để giao hàng và xe k đi từ i đến j, thì thời gian phải tính thêm pack hàng}
+			&T_{j}^k >= T_{i}^k + t_{ij} + \delta \dot \sum_{c \in C}u_{j}^{c} - M \dot (1 - x_{ij}^{k}) &&\quad \forall k \in K, i \in N_0, j \in (D \setminus \{i\})
+			\intertext{Nếu drone c bay đến đỉnh j để giao hàng cho xe tải, thì thời gian để xe giao xong cho đỉnh j phải lớn hơn hoặc bằng thời gian khởi động của drone + thời gian drone bay từ depot tới i + thời gian dỡ hàng}
+			&T_{j}^k >= s_{j}^{c} + d_{j} + \sigma - M \dot (1 - u_{j}^{c}) &&\quad \forall k \in K, c \in C, j \in D
+			\intertext{Nếu drone c bay từ i đến j để giao hàng thì thời gian khởi động của drone c để bắt đầu đi tới j j phải lớn hơn hoặc bằng thời thời gian xe tải k giao hàng xong tại i + thời gian drone bay đến i từ depot}
+			&T_{j}^k >= s_{j}^{c} + d_{j} + - M \dot (1 - r_{ij}^{c}) &&\quad \forall k \in K, c \in C, i \in D, j \in D \setminus \{i\}
+		\end{alignat}
+	\item Các ràng buộc về thời gian
+		\begin{alignat}{2}
+			\intertext{Thời gian drone c khời động cho điểm j}
+			&s_{i}^{c} >= w_{i} \dot (\sum_{k \in K}y_{ij}^{kc}) &&\quad \forall c \in C, i \in N, j \in D
 		\end{alignat}
 \end{enumerate}
 
