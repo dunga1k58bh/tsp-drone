@@ -132,28 +132,14 @@ Thoả mãn:
 			\intertext{Thời gian xe tải k Rời depot}
 			&T_{0}^{k} >= w_{j} \dot (\sum_{k \in K}y_{0j}^{kc}) &&\quad \forall c \in C, j \in D
 		\end{alignat}
-\end{enumerate}
-
-\subsection{Second Subsection}
-
-This is the second subsection.
-
-\subsubsection{Subsubsection}
-
-This is a subsubsection within the second subsection.
-
-\section{Conclusion}
-
-This is the conclusion of my document.
-
-\section{Summary}
-
-Here is a summary of the main points:
-
-\begin{enumerate}
-  \item Item 1: This is the first item.
-  \item Item 2: This is the second item.
-  \item Item 3: This is the third item.
+		
+	\item Lower bound cho thời gian giao hàng
+		\begin{alignat}{2}
+			\intertext{Thời gian xe tải k dừng lại tại đỉnh j}
+			&e_{j}^{k} >= T_{j}^{k} - (T_{i}^{k} + t_{ij}) - M \dot (1 - x_{ij}^{k}) &&\quad \forall k \in K, i \in N_0, j \in D
+			\intertext{Thời gian xe tải dừng ở điểm j sẽ bằng 0 nếu drone không bay tới đó}
+			&e_{j}^{k} <= M \dot (\sum_{c \in C}u_{j}^{c}) &&\quad \forall k \in K, j \in D
+		\end{alignat}
 \end{enumerate}
 
 \end{document}
